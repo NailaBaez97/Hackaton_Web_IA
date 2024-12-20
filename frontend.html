@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF Mood Generator 🌈</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #FF6B9E;
+            --color-secondary: #6B5B95;
+            --color-accent: #88D8B0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes floating {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(-45deg,
+                    #ee7752,
+                    #e73c7e,
+                    #23a6d5,
+                    #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            perspective: 1000px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.1),
+                0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+            transform: rotateX(10deg);
+        }
+
+        .container:hover {
+            transform: rotateX(0deg) scale(1.03);
+            box-shadow:
+                0 20px 45px rgba(0, 0, 0, 0.2),
+                0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .emoji-title {
+            font-size: 3em;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        .emoji-title span {
+            margin: 0 10px;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .emoji-title span:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        h1 {
+            color: var(--color-primary);
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(45deg,
+                    var(--color-primary),
+                    var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #prompt {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid var(--color-accent);
+            border-radius: 15px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        #prompt:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow:
+                0 0 15px rgba(255, 107, 158, 0.3),
+                inset 0 0 10px rgba(255, 107, 158, 0.1);
+        }
+
+        button {
+            background: linear-gradient(45deg,
+                    var(--color-primary),
+                    var(--color-secondary));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow:
+                0 5px 15px rgba(255, 107, 158, 0.4),
+                0 3px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.3),
+                    transparent);
+            transition: all 0.5s;
+        }
+
+        button:hover:before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 7px 20px rgba(255, 64, 129, 0.5),
+                0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #gifContainer {
+            margin-top: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow:
+                0 10px 20px rgba(0, 0, 0, 0.1),
+                0 5px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.5s ease;
+        }
+
+        #generatedGif {
+            max-width: 100%;
+            border-radius: 15px;
+            transition: transform 0.5s ease;
+            animation: pulse 2s infinite;
+        }
+
+        #generatedGif:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="emoji-title">
+            <span>🎉</span>
+            <span>🌈</span>
+            <span>✨</span>
+        </div>
+        <h1>GIF Mood Generator</h1>
+        <input type="text" id="prompt" placeholder="¿Qué gif quieres crear hoy? 🤔">
+        <button onclick="generateGif()">¡Genera tu GIF! 🚀</button>
+        <div id="gifContainer">
+            <img id="generatedGif" src="" alt="GIF generado" style="display: none;">
+        </div>
+    </div>
+
+    <script>
+        async function generateGif() {
+            const prompt = document.getElementById('prompt').value;
+            const gifContainer = document.getElementById('generatedGif');
+
+            if (!prompt) {
+                alert('¡Ups! Necesitas escribir algo primero 😉');
+                return;
+            }
+
+            try {
+                const response = await fetch('/generate-gif', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: prompt })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Error generando GIF');
+                }
+
+                gifContainer.src = data.gif_url;
+                gifContainer.style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+                alert('No se pudo generar el GIF. ¡Inténtalo de nuevo! 🙃');
+            }
+        }
+
+    </script>
+</body>
+
+</html>
